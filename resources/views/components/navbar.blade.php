@@ -1,5 +1,5 @@
 <nav class="px-8 md:px-32 py-0 md:py-6 flex justify-between items-center w-full shadow-sm">
-    <a class="hover:text-gray-300" href="/">
+    <a href="/">
         <h1 class="text-3xl font-semibold">GA<span class="text-violet-500">ME</span>RS</h1>
     </a>
 
