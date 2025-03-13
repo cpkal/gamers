@@ -13,12 +13,12 @@
     <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css" />
 </head>
 
-<body class="dark:text-white dark:bg-neutral-900">
+<body>
     @include('components.navbar')
 
-    @if (request()->is('/'))
+    {{-- @if (request()->is('/'))
         @include('components.hero')
-    @endif
+    @endif --}}
 
     @yield('main')
 
