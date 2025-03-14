@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { AiOutlineDelete, AiOutlineEdit } from "react-icons/ai";
 import BookingDialog from "./BookingDialog";
+import { formatDate, formatRupiah, formatRupiahWithSesi } from "@/lib/helper";
 
 
 export default function ProductCard({ product, productsSelected, handleSelect, handleDelete }) {
@@ -20,7 +21,7 @@ export default function ProductCard({ product, productsSelected, handleSelect, h
     setEditDialogOpen(false);
   }
 
-  const [pickTime, setPickTime] = useState(null);
+  const [pickTime, setPickTime] = useState("08:00");
   const [qty, setQty] = useState(1);
   const [dateRange, setDateRange] = useState(
     {
@@ -30,24 +31,16 @@ export default function ProductCard({ product, productsSelected, handleSelect, h
     },
   );
 
-  const formatDate = (date) => {
-    return date.toLocaleDateString("en-GB", {
-      day: "2-digit",
-      month: "short",
-      year: "numeric",
-    });
-  };
-
   const [dateRangeString, setDateRangeString] = useState(null);
 
-  useEffect(() => {
-    localStorage.setItem(product.id, JSON.stringify({
-      qty: qty,
-      pickTime: pickTime,
-      startDate: dateRange.startDate,
-      endDate: dateRange.endDate,
-    }));
-  }, [pickTime, dateRange, qty]);
+  // useEffect(() => {
+  //   localStorage.setItem(product.id, JSON.stringify({
+  //     qty: qty,
+  //     pickTime: pickTime,
+  //     startDate: dateRange.startDate,
+  //     endDate: dateRange.endDate,
+  //   }));
+  // }, [pickTime, dateRange, qty]);
 
   const handleSetDateRange = (ranges) => {
     setDateRange(ranges.selection);
@@ -87,7 +80,7 @@ export default function ProductCard({ product, productsSelected, handleSelect, h
           alt="Product Image" />
         <div className="p-4">
           <h2 className="text-xl font-semibold text-gray-800">{product.name}</h2>
-          <p className="text-lg py-2">{product.price}</p>
+          <p className="text-lg py-2">{formatRupiahWithSesi(product.price)}</p>
           <button className={`mt-4 w-full bg-violet-600 text-white py-2 px-4 rounded-lg hover:bg-violet-700 ${show ? 'hidden' : 'block'}`} onClick={() => handleSelect(product)}>
             Booking Sekarang
           </button>

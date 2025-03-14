@@ -1,4 +1,6 @@
+import { formatRupiah } from "@/lib/helper";
 import { Link } from "@inertiajs/react"
+import axios from "axios";
 import { useEffect, useState } from "react"
 
 const useLocalStorageListener = () => {
@@ -36,14 +38,20 @@ const getAllLocalStorageItems = () => {
 export default function CheckoutSummary() {
   const localStorageData = useLocalStorageListener();
   const [total, setTotal] = useState(0);
+  const [isLoading, setLoading] = useState(false);
 
   useEffect(() => {
-    // setTotal()
+    setLoading(true);
+    axios.post('/api/checkout-summary', localStorageData)
+      .then(res => setTotal(res.data))
+      .catch(err => console.log('failed to retrieve data ' + err));
+    setLoading(false);
+    
   }, [localStorageData]);
 
   return (
     <div className='fixed bottom-5 right-5 p-8 bg-white border-2 border-gray-500 flex gap-4 items-center rounded-xl'>
-      <h1 className='text-2xl font-semibold'>Total: Rp50,000</h1>
+      {/* <h1 className='text-2xl font-semibold'>Total: {formatRupiah(total)}</h1> */}
       {/* <p>{JSON.stringify(localStorageData, null, 2)}</p> */}
       <Link href='/checkout' className="px-4 py-2 bg-violet-600 text-white rounded-full">Checkout</Link>
     </div>
