@@ -20,8 +20,6 @@ return new class extends Migration
             $table->enum('status', ['pending', 'confirmed', 'cancelled'])->default('pending');
             $table->unsignedBigInteger('product_id');
             $table->foreign('product_id')->references('id')->on('products')->onDelete('cascade');
-            $table->unsignedBigInteger('user_id');
-            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
             $table->timestamps();
         });
     }

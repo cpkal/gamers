@@ -34,7 +34,7 @@ export default function BookingDialog({ product, show, handleClose, handleSetPic
           </button>
           <div></div>
           <button onClick={() => handleClose()} className="bg-violet-600 text-white px-4 py-2 rounded-lg hover:bg-violet-700 hover:cursor-pointer">
-            Konfirmasi
+            Ok
           </button>
         </div>
       </div>

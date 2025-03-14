@@ -13,6 +13,12 @@ export default function ProductCard({ product, productsSelected, handleSelect, h
     productsSelected.map((productSelected) => {
       if (productSelected.productId == product.id) {
         setShow(true);
+        localStorage.setItem(product.id, JSON.stringify({
+          qty: qty,
+          pickTime: pickTime,
+          startDate: dateRange.startDate,
+          endDate: dateRange.endDate,
+        }));
       }
     })
   }, [productsSelected]);
@@ -44,6 +50,8 @@ export default function ProductCard({ product, productsSelected, handleSelect, h
 
   const handleSetDateRange = (ranges) => {
     setDateRange(ranges.selection);
+    const parsed = JSON.parse(localStorage.getItem(product.id));
+    localStorage.setItem(product.id, JSON.stringify({ ...parsed, startDate: ranges.selection.startDate, endDate: ranges.selection.endDate }));
     setDateRangeString(`${formatDate(new Date(ranges.selection.startDate))} - ${formatDate(new Date(ranges.selection.endDate))}`);
   };
 
@@ -51,15 +59,16 @@ export default function ProductCard({ product, productsSelected, handleSelect, h
     const pickTime = e.target.value;
     setPickTime(pickTime)
     const parsed = JSON.parse(localStorage.getItem(product.id));
-    localStorage.setItem(product.id, JSON.stringify({ pickTime, ...parsed }));
+    localStorage.setItem(product.id, JSON.stringify({ ...parsed, pickTime }));
   }
 
   const handleSetQty = (e) => {
-    const qty = e.target.value;
-    setQty(qty);
-    const parsed = JSON.parse(localStorage.getItem(product.id));
-    localStorage.setItem(product.id, JSON.stringify({ qty, ...parsed }));
-  }
+    const q = e.target.value
+    setQty(q);
+    const parsed = JSON.parse(localStorage.getItem(product.id)) || {};
+    localStorage.setItem(product.id, JSON.stringify({ ...parsed, qty: q }));
+  };
+
 
   return (
     <>
