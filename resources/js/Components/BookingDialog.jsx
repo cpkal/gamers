@@ -5,7 +5,6 @@ import 'react-date-range/dist/theme/default.css'; // theme css file
 
 export default function BookingDialog({ product, show, handleClose, handleSetPickTime, handleSetQty, handleSetDateRange, pickTime,  qty, dateRange }) {
   
-
   return (
     <div id="bookingModal" className={`fixed inset-0 bg-black/80 ${show ? '' : 'hidden'} flex justify-center items-center`}>
       <div className="p-6 rounded-2xl shadow-lg w-1/2 bg-white">
@@ -14,18 +13,18 @@ export default function BookingDialog({ product, show, handleClose, handleSetPic
         <div className="flex">
           <div>
             <label className="block text-gray-700 font-semibold">Pilih Tanggal:</label>
-            <DateRange ranges={dateRange}
+            <DateRange ranges={[dateRange]}
               onChange={handleSetDateRange}
               moveRangeOnFirstSelection={false} />
           </div>
 
           <div className="w-full p-4">
             <label className="block text-gray-700">Pilih Jam Pengambilan:</label>
-            <input onChange={(e) => handleSetPickTime(e)} type="time" value={pickTime}  className="w-full p-2 border rounded-lg mb-3" />
+            <input onChange={(e) => handleSetPickTime(e)} type="time" value={pickTime ?? "08.00"} min="08:00" max="17:00"  className="w-full p-2 border rounded-lg mb-3" />
 
             <label className="block text-gray-700">Total Pesanan:</label>
             <input onChange={(e) => handleSetQty(e)} type="number" min="1"
-              className="w-full p-2 border rounded-lg mb-4" value={qty ?? "1"} />
+              className="w-full p-2 border rounded-lg mb-4"  value={qty ?? "1"} />
           </div>
         </div>
 

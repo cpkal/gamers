@@ -22,13 +22,13 @@ export default function ProductCard({ product, productsSelected, handleSelect, h
 
   const [pickTime, setPickTime] = useState(null);
   const [qty, setQty] = useState(1);
-  const [dateRange, setDateRange] = useState([
+  const [dateRange, setDateRange] = useState(
     {
       startDate: new Date(),
       endDate: new Date(),
       key: "selection",
     },
-  ]);
+  );
 
   const formatDate = (date) => {
     return date.toLocaleDateString("en-GB", {
@@ -37,13 +37,21 @@ export default function ProductCard({ product, productsSelected, handleSelect, h
       year: "numeric",
     });
   };
-  
+
   const [dateRangeString, setDateRangeString] = useState(null);
 
+  useEffect(() => {
+    localStorage.setItem(product.id, JSON.stringify({
+      qty: qty,
+      pickTime: pickTime,
+      startDate: dateRange.startDate,
+      endDate: dateRange.endDate,
+    }));
+  }, [pickTime, dateRange, qty]);
+
   const handleSetDateRange = (ranges) => {
-    setDateRange([ranges.selection]);
-    console.log(dateRange);
-    setDateRangeString(`${formatDate(new Date(dateRange[0].startDate))} - ${formatDate(new Date(dateRange[0].endDate))}`);
+    setDateRange(ranges.selection);
+    setDateRangeString(`${formatDate(new Date(ranges.selection.startDate))} - ${formatDate(new Date(ranges.selection.endDate))}`);
   };
 
   const handleSetPickTime = (e) => {
@@ -88,7 +96,7 @@ export default function ProductCard({ product, productsSelected, handleSelect, h
             <div className="flex gap-2">
               <div>
                 <div className="p-1 border-2 rounded-full border-violet-600 flex gap-2 inline-block">
-                  <p className="text-sm">{ dateRangeString ?? '-' }</p>
+                  <p className="text-sm">{dateRangeString ?? '-'}</p>
                 </div>
               </div>
               <div>
@@ -98,7 +106,7 @@ export default function ProductCard({ product, productsSelected, handleSelect, h
               </div>
               <div>
                 <div className="p-1 border-2 rounded-full border-violet-600 inline-block">
-                  <p className="text-sm">{qty  ?? "-"} Qty</p>
+                  <p className="text-sm">{qty ?? "-"} Qty</p>
                 </div>
               </div>
             </div>

@@ -1,3 +1,4 @@
+import CheckoutSummary from '@/Components/CheckoutSummary';
 import Container from '@/Components/Container';
 import Navbar from '@/Components/Navbar';
 import ProductCard from '@/Components/ProductCard';
@@ -37,6 +38,7 @@ export default function Welcome({ auth, laravelVersion, phpVersion }) {
 
     const handleDeleteProduct = (product) => {
         setProductsSelected(productsSelected.filter(a => a.productId !== product.id))
+        localStorage.removeItem(product.id);
     }
 
     const [bookingStartDate, setBookingStartDate] = useState(null);
@@ -68,10 +70,7 @@ export default function Welcome({ auth, laravelVersion, phpVersion }) {
                     })}
                 </div>
 
-                <div className='fixed bottom-5 right-5 p-8 bg-white border-2 border-gray-500 flex gap-4 items-center rounded-xl'>
-                    <h1 className='text-2xl font-semibold'>Total: Rp50,000</h1>
-                    <Link href='/checkout' className="px-4 py-2 bg-violet-600 text-white rounded-full">Checkout</Link>
-                </div>
+                <CheckoutSummary />
             </Container>
         </>
     );
