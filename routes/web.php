@@ -10,6 +10,12 @@ use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
+Route::get('/payment/finish', function (Request $request) {
+    return $request->all();
+
+    return redirect('/my-orders');
+});
+
 Route::get('/', function () {
     return Inertia::render('Welcome', [
         'canLogin' => Route::has('login'),
