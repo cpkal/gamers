@@ -2,11 +2,12 @@ import Badge from "@/Components/Badge";
 import Container from "@/Components/Container";
 import Navbar from "@/Components/Navbar";
 import { formatDate, formatRupiah } from "@/lib/helper";
-import { Link } from "@inertiajs/react";
+import { Head, Link } from "@inertiajs/react";
 
 export default function MyOrders({ auth, orders }) {
   return (
     <>
+      <Head title="My Orders" />
       <Navbar auth={auth} />
       <Container>
         <h1 className="text-2xl font-semibold mb-4">My Orders</h1>

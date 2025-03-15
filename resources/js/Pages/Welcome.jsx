@@ -1,4 +1,5 @@
-import CheckoutSummary from '@/Components/CheckoutSummary';
+import CheckoutButton from '@/Components/CheckoutButton';
+import CheckoutSummary from '@/Components/CheckoutButton';
 import Container from '@/Components/Container';
 import Navbar from '@/Components/Navbar';
 import ProductCard from '@/Components/ProductCard';
@@ -38,7 +39,7 @@ export default function Welcome({ auth, laravelVersion, phpVersion, products }) 
 
     return (
         <>
-            <Head title="Welcome" />
+            <Head title="Gamers" />
             <Navbar auth={auth} />
 
             <Container>
@@ -58,7 +59,7 @@ export default function Welcome({ auth, laravelVersion, phpVersion, products }) 
                     })}
                 </div>
 
-                <CheckoutSummary />
+                <CheckoutButton />
             </Container>
         </>
     );
