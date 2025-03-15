@@ -8,6 +8,31 @@ export default function ProductCard({ product, productsSelected, handleSelect, h
   const [show, setShow] = useState(false);
   const [isEditDialogOpen, setEditDialogOpen] = useState(false);
 
+  // useEffect(() => {
+  //   setShow(true);
+  //   productsSelected.map((productSelected) => {
+  //     if (productSelected.productId == product.id) {
+  //       setShow(true);
+  //       localStorage.setItem(product.id, JSON.stringify({
+  //         qty: qty,
+  //         pickTime: pickTime,
+  //         startDate: dateRange.startDate,
+  //         endDate: dateRange.endDate,
+  //       }));
+  //     }
+  //   })
+  // }, []);
+
+  useEffect(() => {
+    // Check localStorage on mount
+    const storedData = localStorage.getItem(product.id);
+    if (storedData) {
+      setShow(true);
+    } else {
+      setShow(false);
+    }
+  }, []); // Runs only once when the component mounts
+
   useEffect(() => {
     setShow(false);
     productsSelected.map((productSelected) => {

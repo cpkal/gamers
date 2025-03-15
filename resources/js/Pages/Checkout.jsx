@@ -45,6 +45,9 @@ export default function Checkout() {
   const calculateAdditionalCostOnWeekend = (product) => {
     const totalBookingDaysOnWeekend = getTotalWeekends(product.startDate, product.endDate);
 
+    console.log(product.startDate);
+    console.log(getTotalWeekends(product.startDate, product.endDate));
+
     return (totalBookingDaysOnWeekend * 50000);
   }
 
@@ -57,14 +60,18 @@ export default function Checkout() {
     return grandTotal;
   }
 
-  const onSubmit = (data) => {
-    router.post('/create_transaction', {
-      order_detail: data,
-      products: products
-    });
-  }
+  const onSubmit = async (data) => {
+    try {
+      await router.post('/create_transaction', {
+        order_detail: data,
+        products: products
+      });
+    } catch (error) {
+      console.error("Error submitting:", error);
+    }
+  };
 
-  const { register, handleSubmit, watch, formState: { errors } } = useForm();
+  const { register, handleSubmit, watch, formState: { errors, isSubmitting, isLoading } } = useForm();
 
   return (
     <>
@@ -135,7 +142,7 @@ export default function Checkout() {
 
               {products.map(product => {
                 return (
-                  <div className="border-2 border-gray-300 p-4 rounded-xl my-2" key={product.id}>
+                  <div className="border-2 border-gray-300 p-4 rounded-xl my-2 leading-6" key={product.id}>
                     <div className="flex items-center rounded-lg py-4 max-w-md" key={product.id}>
                       <img src={product.image} alt="Product Image" className="w-16 h-16 rounded-lg object-cover" />
 
@@ -157,10 +164,14 @@ export default function Checkout() {
                       <p>{formatDate(new Date(product.startDate)) + ' - ' + formatDate(new Date(product.endDate))}</p>
                     </div>
                     <div className="flex justify-between">
+                      <p>Jam Pengambilan:</p>
+                      <p>{product.pickTime}</p>
+                    </div>
+                    <div className="flex justify-between">
                       <p>Biaya Tambahan (Weekend):</p>
                       <p>{formatRupiah(calculateAdditionalCostOnWeekend(product))}</p>
                     </div>
-                    <div className="flex justify-between">
+                    <div className="flex justify-between font-semibold">
                       <p>Subtotal:</p>
                       <p>{formatRupiah(calculateSubtotal(product))}</p>
                     </div>
@@ -177,7 +188,7 @@ export default function Checkout() {
                   <p>{formatRupiah(calculateGrandTotal(products))}</p>
                 </div>
 
-                <input type="submit" className="p-2 w-full rounded-lg bg-violet-600 text-white mt-6" />
+                <input type="submit" disabled={isSubmitting} className={`${isSubmitting ? 'bg-violet-300' : 'bg-violet-600 hover:bg-violet-700'} p-2 w-full rounded-lg text-white mt-6 hover:cursor-pointer`} placeholder={isSubmitting ? "Submitting..." : "Submit"} />
               </div>
             </div>
           </div>

@@ -54,3 +54,30 @@ export const getTotalWeekends = (startDate, endDate) => {
 
   return count;
 }
+
+export const calculateSubtotal = (product) => {
+  const totalBookingDays = getTotalDays(product.startDate, product.endDate);
+  const qty = product.qty;
+
+  let subtotal = product.price * qty * totalBookingDays + calculateAdditionalCostOnWeekend(product);
+
+  return subtotal;
+}
+
+export const calculateAdditionalCostOnWeekend = (product) => {
+  const totalBookingDaysOnWeekend = getTotalWeekends(product.startDate, product.endDate);
+
+  console.log(product.startDate);
+  console.log(getTotalWeekends(product.startDate, product.endDate));
+
+  return (totalBookingDaysOnWeekend * 50000);
+}
+
+export const calculateGrandTotal = (products) => {
+  let grandTotal = 0;
+  products.map((product) => {
+    grandTotal += calculateSubtotal(product);
+  })
+
+  return grandTotal;
+}
