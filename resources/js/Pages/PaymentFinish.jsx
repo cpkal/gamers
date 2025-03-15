@@ -9,7 +9,7 @@ export default function PaymentFinish({ order }) {
         <h2 class="text-3xl font-bold text-gray-800 mt-6">Pembayaran Berhasil!</h2>
         <p class="text-lg text-gray-600 mt-3">Kamu melakukan <span className="text-green-500 font-bold">{ order.bookings.length }</span> booking, untuk detail lanjutannya klik tombol di bawah ini</p>       
 
-        <Link href={`/my-orders/${order.id}`} class="mt-6 inline-block bg-blue-500 text-white px-8 py-3 text-lg rounded-lg shadow hover:bg-blue-600">Lihat detail booking</Link>
+        <Link href={`/my-orders/${order.id}`} class="mt-6 inline-block bg-amber-500 text-white px-8 py-3 text-lg rounded-lg shadow hover:bg-blue-600">Lihat detail booking</Link>
     </div>
   )
 }

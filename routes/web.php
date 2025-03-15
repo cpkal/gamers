@@ -64,22 +64,23 @@ Route::middleware('auth')->group(function () {
         $order->save();
 
         foreach ($products as $product) {
+            $startDate = new DateTime($product['startDate'], new DateTimeZone("UTC"));
+            $startDate->setTimezone(new DateTimeZone("Asia/Bangkok"));
+            $endDate = new DateTime($product['endDate'], new DateTimeZone("UTC"));
+            $endDate->setTimezone(new DateTimeZone("Asia/Bangkok"));  
+
             $booking = new Booking();
             $booking->qty_ordered = $product['qty'];
             $booking->pick_time = $product['pickTime'];
-            $booking->booking_end_date = new DateTime($product['endDate']);
-            $booking->booking_start_date = new DateTime($product['startDate']);
+            $booking->booking_end_date = $endDate;
+            $booking->booking_start_date = $startDate;
             $booking->status = 'pending';
             $booking->product_id = $product['id'];
             $booking->order_id = $order->id;
             $booking->save();
 
             $productDB = Product::find($product['id']);
-            $startDate = new DateTime($product['startDate'], new DateTimeZone("UTC"));
-            $startDate->setTimezone(new DateTimeZone("Asia/Bangkok"));
-            $endDate = new DateTime($product['endDate'], new DateTimeZone("UTC"));
-            $endDate->setTimezone(new DateTimeZone("Asia/Bangkok"));
-
+            
             $totalBookingDays = countDays($startDate, $endDate);
             $totalWeekendDays = countWeekendDays($startDate, $endDate);
 
@@ -128,7 +129,7 @@ Route::middleware('auth')->group(function () {
             'phpVersion' => PHP_VERSION,
             'orders' => Order::with(['bookings.product'])->where('user_id', $request->user()->id)->when($status, function ($query, $status) {
                 return $query->where('status', $status);
-            })->get()
+            })->latest()->get()
         ]);
     });
 

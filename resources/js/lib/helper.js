@@ -1,17 +1,20 @@
 export const formatRupiah = (amount) => {
-  return 'Rp' + amount.toLocaleString('id-ID');
-}
+  return 'Rp' + Math.round(amount).toLocaleString('id-ID');
+};
 
 export const formatRupiahWithSesi = (amount) => {
   return formatRupiah(amount) + ' / sesi';
 }
 
 export const formatDate = (date) => {
-  return date.toLocaleDateString("en-GB", {
+  const formattedDate = new Intl.DateTimeFormat("en-GB", {
+    timeZone: "Asia/Jakarta",
     day: "2-digit",
     month: "short",
     year: "numeric",
-  });
+  }).format(date);
+
+  return formattedDate;
 };
 
 export const getAllLocalStorageItems = () => {

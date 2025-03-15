@@ -11,19 +11,28 @@ export default function OrderConfirmation({ auth, order }) {
         <h1 className="text-2xl font-semibold mb-4">Order #{order.id}</h1>
         <div className="border-2 p-8 rounded-xl">
 
+          <div className="flex justify-between">
+            <h2 className="text-2xl font-semibold mt-4">Daftar Booking</h2>
 
-          <h2 className="text-2xl font-semibold mt-4">Daftar Booking</h2>
+            {order.status == 'pending' && <div className="flex flex-col items-end">
+              <a href={order.payment_url} className="bg-violet-600 text-white py-2 px-4 rounded-lg hover:bg-violet-700 mt-4">
+                Pay Now
+              </a>
+            </div>}
+          </div>
+
           {order.bookings.map(booking => {
             const product = booking.product;
             return (
-              <div className="border-2 border-gray-300 p-8 rounded-xl my-2 leading-6">
+              <div className="border-2 border-gray-300 p-8 rounded-xl my-4 leading-6">
                 <div className="flex items-center rounded-lg py-4 max-w-md" key={product.id}>
                   <img src={product.image} alt="Product Image" className="w-16 h-16 rounded-lg object-cover" />
 
                   <div className="ml-4 flex-1">
-                    <h2 className="text-lg font-semibold text-gray-800">{product.name}</h2>
+                    <h2 className="text-lg font-semibold text-gray-800">{product.name} <Badge status={booking.status} /></h2>
                     <p className="text-gray-600">{formatRupiah(product.price)} - Qty: {booking.qty_ordered} </p>
                   </div>
+
                 </div>
                 <div className="flex justify-between">
                   <p>Harga Per Sesi:</p>
@@ -42,7 +51,7 @@ export default function OrderConfirmation({ auth, order }) {
                   <p>{booking.pick_time}</p>
                 </div>
                 <div className="flex flex-col items-end py-4">
-                  { order.status === 'paid' && <p className="text-xl">Ambil sebelum <span className="text-green-600 font-semibold">{formatDate(new Date(booking.booking_start_date))}</span>, pukul <span className="text-green-600 font-semibold">{booking.pick_time} WIB</span> di lokasi <span className="font-semibold">Jl. Martadinata No. 5 Kota Bandung</span></p> }
+                  {order.status === 'paid' && <p className="text-xl">Ambil sebelum <span className="text-green-600 font-semibold">{formatDate(new Date(booking.booking_start_date))}</span>, pukul <span className="text-green-600 font-semibold">{booking.pick_time} WIB</span> di lokasi <span className="font-semibold">Jl. Martadinata No. 5 Kota Bandung</span></p>}
                 </div>
               </div>
 
@@ -65,11 +74,7 @@ export default function OrderConfirmation({ auth, order }) {
           </div>
 
           {/* payment link if not yet pay */}
-          {order.status == 'pending' && <div className="flex flex-col items-end">
-            <a href={order.payment_url} className="bg-violet-600 text-white py-2 px-4 rounded-lg hover:bg-violet-700 mt-4">
-              Pay Now
-            </a>
-          </div>}
+
         </div>
       </Container>
     </>

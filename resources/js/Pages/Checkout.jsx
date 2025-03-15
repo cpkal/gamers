@@ -45,9 +45,6 @@ export default function Checkout() {
   const calculateAdditionalCostOnWeekend = (product) => {
     const totalBookingDaysOnWeekend = getTotalWeekends(product.startDate, product.endDate);
 
-    console.log(product.startDate);
-    console.log(getTotalWeekends(product.startDate, product.endDate));
-
     return (totalBookingDaysOnWeekend * 50000);
   }
 
@@ -62,10 +59,11 @@ export default function Checkout() {
 
   const onSubmit = async (data) => {
     try {
-      await router.post('/create_transaction', {
+      router.post('/create_transaction', {
         order_detail: data,
         products: products
       });
+      localStorage.clear();
     } catch (error) {
       console.error("Error submitting:", error);
     }

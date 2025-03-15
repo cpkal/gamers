@@ -48,11 +48,7 @@ export default function MyOrders({ auth, orders }) {
                       <div>Payment Status: <Badge status={order.status} /></div>
                     </div>
 
-                    <div className="flex flex-col items-end">
-                      {order.status === 'pending' && <a href={order.payment_url} className="bg-violet-600 text-white py-2 px-4 rounded-lg hover:bg-violet-700 mt-4">
-                        Pay Now
-                      </a>}
-                    </div>
+                
                   </div>
                 </Link>
               )

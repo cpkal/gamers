@@ -6,9 +6,20 @@ import { Head } from '@inertiajs/react';
 import {  useState } from 'react';
 
 export default function Welcome({ auth, laravelVersion, phpVersion, products }) {
-    const [productsSelected, setProductsSelected] = useState([]);
+    const [productsSelected, setProductsSelected] = useState([]); //used for ui update only
 
     const handleSelectProduct = (product) => {
+        localStorage.setItem(product.id, JSON.stringify({
+            productId: product.id,
+            image: product.image,
+            name: product.name,
+            price: product.price,
+            qty: 1,
+            pickTime: "08:00",
+            startDate: new Date(),
+            endDate: new Date(new Date().setDate(new Date().getDate() + 1))
+        }));
+
         setProductsSelected([
             {
                 productId: product.id,
@@ -17,7 +28,7 @@ export default function Welcome({ auth, laravelVersion, phpVersion, products }) 
                 price: product.price
             },
             ...productsSelected
-        ])
+        ]);
     }
 
     const handleDeleteProduct = (product) => {

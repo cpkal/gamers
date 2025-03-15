@@ -2,50 +2,25 @@ import { useEffect, useState } from "react";
 import { AiOutlineDelete, AiOutlineEdit } from "react-icons/ai";
 import BookingDialog from "./BookingDialog";
 import { formatDate, formatRupiah, formatRupiahWithSesi } from "@/lib/helper";
+import BadgeBookingInfo from "./BadgeBookingInfo";
 
 
 export default function ProductCard({ product, productsSelected, handleSelect, handleDelete }) {
   const [show, setShow] = useState(false);
   const [isEditDialogOpen, setEditDialogOpen] = useState(false);
 
-  // useEffect(() => {
-  //   setShow(true);
-  //   productsSelected.map((productSelected) => {
-  //     if (productSelected.productId == product.id) {
-  //       setShow(true);
-  //       localStorage.setItem(product.id, JSON.stringify({
-  //         qty: qty,
-  //         pickTime: pickTime,
-  //         startDate: dateRange.startDate,
-  //         endDate: dateRange.endDate,
-  //       }));
-  //     }
-  //   })
-  // }, []);
-
   useEffect(() => {
-    // Check localStorage on mount
     const storedData = localStorage.getItem(product.id);
     if (storedData) {
+      const { qty, pickTime, startDate, endDate } = JSON.parse(storedData);
+      setQty(qty);
+      setPickTime(pickTime);
+      setDateRange({ startDate: new Date(startDate), endDate: new Date(endDate), key: 'selection' });
+      setDateRangeString(`${formatDate(new Date(startDate))} - ${formatDate(new Date(endDate))}`);
       setShow(true);
     } else {
       setShow(false);
     }
-  }, []); // Runs only once when the component mounts
-
-  useEffect(() => {
-    setShow(false);
-    productsSelected.map((productSelected) => {
-      if (productSelected.productId == product.id) {
-        setShow(true);
-        localStorage.setItem(product.id, JSON.stringify({
-          qty: qty,
-          pickTime: pickTime,
-          startDate: dateRange.startDate,
-          endDate: dateRange.endDate,
-        }));
-      }
-    })
   }, [productsSelected]);
 
   const handleCloseEditDialog = () => {
@@ -63,15 +38,6 @@ export default function ProductCard({ product, productsSelected, handleSelect, h
   );
 
   const [dateRangeString, setDateRangeString] = useState(null);
-
-  // useEffect(() => {
-  //   localStorage.setItem(product.id, JSON.stringify({
-  //     qty: qty,
-  //     pickTime: pickTime,
-  //     startDate: dateRange.startDate,
-  //     endDate: dateRange.endDate,
-  //   }));
-  // }, [pickTime, dateRange, qty]);
 
   const handleSetDateRange = (ranges) => {
     setDateRange(ranges.selection);
@@ -93,7 +59,6 @@ export default function ProductCard({ product, productsSelected, handleSelect, h
     const parsed = JSON.parse(localStorage.getItem(product.id)) || {};
     localStorage.setItem(product.id, JSON.stringify({ ...parsed, qty: q }));
   };
-
 
   return (
     <>
@@ -120,24 +85,7 @@ export default function ProductCard({ product, productsSelected, handleSelect, h
           </button>
 
           <div className={show ? 'block' : 'hidden'}>
-            <div className="flex flex-col md:flex-row gap-2">
-              <div>
-                <div className="p-1 border-2 rounded-full border-violet-600 flex gap-2 inline-block w-min-auto">
-                  <p className="text-sm">{dateRangeString ?? '-'}</p>
-                </div>
-              </div>
-              <div>
-                <div className="p-1 border-2 rounded-full border-violet-600 inline-block">
-                  <p className="text-sm">Jam {pickTime ?? "-"}</p>
-                </div>
-              </div>
-              <div>
-                <div className="p-1 border-2 rounded-full border-violet-600 inline-block">
-                  <p className="text-sm">{qty ?? "-"} Qty</p>
-                </div>
-              </div>
-            </div>
-
+            <BadgeBookingInfo dateRangeString={dateRangeString} pickTime={pickTime} qty={qty} />
             <div className="flex gap-4">
               <button className="p-3 border-2 border-violet-600 bg-violet-600 rounded-lg mt-4 w-4/5 flex justify-center" onClick={() => setEditDialogOpen(true)}>
                 <AiOutlineEdit color="white" size={18} />
