@@ -60,10 +60,9 @@ class OrderController extends Controller
             // in real application, we should reduce the stock of the product here
 
             $totalBookingDays = countDays($startDate, $endDate);
-            $totalWeekendDays = countWeekendDays($startDate, $endDate);
+            // $totalWeekendDays = countWeekendDays($startDate, $endDate);
 
-            // let subtotal = product.price * qty * totalBookingDays + calculateAdditionalCostOnWeekend(product);  
-            $grand_total += $productDB->price * $product['qty'] * $totalBookingDays + ($totalWeekendDays * 50000);
+            $grand_total += $productDB->price * $product['qty'] * $totalBookingDays + (isWeekend($startDate) ? 50000 : 0);
         }
 
         $order->grand_total = $grand_total;
@@ -74,7 +73,7 @@ class OrderController extends Controller
 
         $data = [
             'transaction_details' => [
-                'order_id' => 'ORDER-' . $order->id,
+                'order_id' => 'TRX-' . $order->id,
                 'gross_amount' => $grand_total,
             ],
             'customer_details' => [

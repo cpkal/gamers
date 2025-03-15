@@ -33,3 +33,10 @@ if (!function_exists('countDays')) {
     return $diff->days;
   }
 }
+
+if (!function_exists('isWeekend')) {
+  function isWeekend(DateTime $date)
+  {
+    return $date->format('N') >= 6;
+  }
+}

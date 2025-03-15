@@ -2,7 +2,7 @@ import { DateRange } from "react-date-range";
 import "react-date-range/dist/styles.css";
 import "react-date-range/dist/theme/default.css";
 
-export default function BookingDialog({ product, show, handleClose, handleSetPickTime, handleSetQty, handleSetDateRange, pickTime, qty, dateRange }) {
+export default function BookingDialog({ product, show, handleClose, handleOK, handleSetPickTime, handleSetQty, handleSetDateRange, pickTime, qty, dateRange }) {
   const today = new Date();
   today.setHours(0, 0, 0, 0);
 
@@ -51,7 +51,7 @@ export default function BookingDialog({ product, show, handleClose, handleSetPic
             Tutup
           </button>
           <div></div>
-          <button onClick={() => handleClose()} className="bg-violet-600 text-white px-4 py-2 rounded-lg hover:bg-violet-700 hover:cursor-pointer">
+          <button onClick={() => handleOK()} className="bg-violet-600 text-white px-4 py-2 rounded-lg hover:bg-violet-700 hover:cursor-pointer">
             Ok
           </button>
         </div>

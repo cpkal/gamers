@@ -1,8 +1,9 @@
 import CheckoutSummary from "@/Components/CheckoutSummary";
 import { formatDate, formatRupiah, getAllLocalStorageItems, getTotalDays, getTotalWeekends } from "@/lib/helper";
-import { Head, router } from "@inertiajs/react"
+import { Head, Link, router } from "@inertiajs/react"
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
+import { AiOutlineArrowLeft } from "react-icons/ai";
 
 export default function Checkout() {
   const [products, setProducts] = useState([]);
@@ -41,6 +42,13 @@ export default function Checkout() {
         return;
       }
 
+      // if startdate and enddate same, give alert
+      const isSameDate = products.some(product => product.startDate === product.endDate);
+      if (isSameDate) {
+        alert("Tanggal booking tidak boleh sama / minimal 1 sesi");
+        return;
+      }
+
       router.post('/create_transaction', {
         order_detail: data,
         products: products
@@ -60,7 +68,12 @@ export default function Checkout() {
         <div className="p-8 md:p-20 flex flex-col md:flex-row gap-4">
           <div className="w-full md:w-3/5">
             <div className=" border-2 rounded-xl p-8">
-              <h1 className="text-2xl font-medium">Checkout</h1>
+              <div className="flex justify-between">
+                <h1 className="text-2xl font-medium">Checkout</h1>
+
+                {/* go back */}
+                <Link href="/" className="flex items-center"><AiOutlineArrowLeft /> Kembali</Link>
+              </div>
 
               <h2 className="text-lg py-4 font-medium">Detail Pelanggan</h2>
 

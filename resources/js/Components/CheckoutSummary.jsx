@@ -1,20 +1,20 @@
-import { formatDate, formatRupiah, getTotalDays, getTotalWeekends } from "@/lib/helper";
+import { formatDate, formatRupiah, getTotalDays, getTotalWeekends, isWeekend } from "@/lib/helper";
 
 export default function CheckoutSummary({ products, isSubmitting }) {
   const calculateSubtotal = (product) => {
     const totalBookingDays = getTotalDays(product.startDate, product.endDate);
     const qty = product.qty;
 
-    let subtotal = product.price * qty * totalBookingDays + calculateAdditionalCostOnWeekend(product);
+    let subtotal = product.price * qty * totalBookingDays + ( isWeekend(product.startDate) ? 50000 : 0 );
 
     return subtotal;
   }
 
-  const calculateAdditionalCostOnWeekend = (product) => {
-    const totalBookingDaysOnWeekend = getTotalWeekends(product.startDate, product.endDate);
+  // const calculateAdditionalCostOnWeekend = (product) => {
+  //   const totalBookingDaysOnWeekend = getTotalWeekends(product.startDate, product.endDate);
 
-    return (totalBookingDaysOnWeekend * 50000);
-  }
+  //   return (totalBookingDaysOnWeekend * 50000);
+  // }
 
   const calculateGrandTotal = (products) => {
     let grandTotal = 0;
@@ -59,7 +59,7 @@ export default function CheckoutSummary({ products, isSubmitting }) {
             </div>
             <div className="flex justify-between">
               <p>Biaya Tambahan (Weekend):</p>
-              <p>{formatRupiah(calculateAdditionalCostOnWeekend(product))}</p>
+              <p>{formatRupiah(isWeekend(product.startDate) ? 50000 : 0)}</p>
             </div>
             <div className="flex justify-between font-semibold">
               <p>Subtotal:</p>

@@ -40,6 +40,8 @@ export default function ProductCard({ product, productsSelected, handleSelect, h
   const [dateRangeString, setDateRangeString] = useState(null);
 
   const handleSetDateRange = (ranges) => {
+    // if ranges same date, dont do any action
+
     setDateRange(ranges.selection);
     const parsed = JSON.parse(localStorage.getItem(product.id));
     localStorage.setItem(product.id, JSON.stringify({ ...parsed, startDate: ranges.selection.startDate, endDate: ranges.selection.endDate }));
@@ -76,6 +78,20 @@ export default function ProductCard({ product, productsSelected, handleSelect, h
     localStorage.setItem(product.id, JSON.stringify({ ...parsed, qty: q }));
   };
 
+  const handleOK = () => {
+    // check date range, if same date give user warning
+    const storedData = localStorage.getItem(product.id);
+    if (storedData) {
+      const { startDate, endDate } = JSON.parse(storedData);
+      if (startDate === endDate) {
+        alert("Tanggal booking tidak boleh sama");
+        return;
+      } else {
+        handleCloseEditDialog();
+      }
+    } 
+  }
+
   return (
     <>
       <BookingDialog
@@ -88,6 +104,7 @@ export default function ProductCard({ product, productsSelected, handleSelect, h
         handleSetPickTime={handleSetPickTime}
         handleSetQty={handleSetQty}
         handleSetDateRange={handleSetDateRange}
+        handleOK={handleOK}
       />
       <div className="max-w-sm rounded-2xl overflow-hidden border-2 ">
         <img className="w-full h-64 object-cover"
