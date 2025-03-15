@@ -8,34 +8,56 @@ use Illuminate\Support\Facades\Route;
 
 Route::post('/receive_transaction_webhook', function(Request $request)
 {
-    Log::info('Midtrans Callback:', $request->all());
-
     // Verify the request with Midtrans API (optional but recommended)
-    // $serverKey = env('MIDTRANS_SERVER_KEY');
-    // $signatureKey = hash('sha512', $request->order_id . $request->status_code . $request->gross_amount . $serverKey);
+    $serverKey = env('MIDTRANS_SERVER_KEY');
+    $signatureKey = hash('sha512', $request->order_id . $request->status_code . $request->gross_amount . $serverKey);
 
-    // if ($signatureKey !== $request->signature_key) {
-    //     return response()->json(['message' => 'Invalid signature'], 403);
-    // }
+    if ($signatureKey !== $request->signature_key) {
+        return response()->json(['message' => 'Invalid signature'], 403);
+    }
 
     // ORDER-5
     //split order_id
     $order_id = explode('-', $request->order_id);
     $order_id = $order_id[1];
 
-    $order = Order::where('order_id', $order_id)->first();
+    $order = Order::where('id', $order_id)->first();
     // Handle the payment status update logic here
-    if ($request->transaction_status == 'settlement' || $request->transaction_status == 'capture') {
+    if ($request->transaction_status == 'settlement') {
         // Payment success
         //update order status
-        $order->status = 'dibayar';
+        $order->status = 'paid';
         $order->save();
     }
-    // } elseif ($request->transaction_status == 'pending') {
-    //     // Payment pending
-    // } elseif ($request->transaction_status == 'cancel' || $request->transaction_status == 'deny' || $request->transaction_status == 'expire') {
-    //     // Payment failed
-    // }
+    
+    if($request->transaction_status == 'capture') {
+        if ($request->fraud_status == 'accept') {
+            //update order status
+            $order->status = 'paid';
+            $order->save();
+        }
+    }
+
+    if ($request->transaction_status == 'cancel') {
+        // Payment failed
+        //update order status
+        $order->status = 'failed';
+        $order->save();
+    }
+
+    if ($request->transaction_status == 'expire') {
+        // Payment expired
+        //update order status
+        $order->status = 'expired';
+        $order->save();
+    }
+
+    if ($request->transaction_status == 'pending') {
+        // Payment pending
+        //update order status
+        $order->status = 'pending';
+        $order->save();
+    }
 
     return response()->json(['message' => 'Success']);
 });

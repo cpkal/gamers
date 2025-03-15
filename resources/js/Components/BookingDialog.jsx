@@ -7,10 +7,10 @@ export default function BookingDialog({ product, show, handleClose, handleSetPic
   
   return (
     <div id="bookingModal" className={`fixed inset-0 bg-black/80 ${show ? '' : 'hidden'} flex justify-center items-center`}>
-      <div className="p-6 rounded-2xl shadow-lg w-1/2 bg-white">
+      <div className="p-6 rounded-2xl shadow-lg w-full m-8 md:w-1/2 bg-white">
         <h2 className="text-xl font-semibold text-gray-800 mb-4">Booking Produk <b>{product.name}</b></h2>
 
-        <div className="flex">
+        <div className="flex flex-col md:flex-row">
           <div>
             <label className="block text-gray-700 font-semibold">Pilih Tanggal:</label>
             <DateRange ranges={[dateRange]}

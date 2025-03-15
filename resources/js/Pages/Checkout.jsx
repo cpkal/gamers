@@ -77,8 +77,8 @@ export default function Checkout() {
     <>
       <Head title="Checkout" />
       <form onSubmit={handleSubmit(onSubmit)}>
-        <div className="p-8 p-20 flex gap-4">
-          <div className="w-3/5">
+        <div className="p-8 md:p-20 flex flex-col md:flex-row gap-4">
+          <div className="w-full md:w-3/5">
             <div className=" border-2 border-gray-400 rounded-xl p-8">
               <h1 className="text-2xl font-medium">Checkout</h1>
 
@@ -135,14 +135,14 @@ export default function Checkout() {
           </div>
 
 
-          <div className="w-2/5">
-            <div className=" border-2 border-gray-400 rounded-xl px-8 py-4">
+          <div className="w-full md:w-2/5">
+            <div className=" border-2 border-gray-400 rounded-xl px-4 md:px-8 py-4">
               <h2 className="text-lg py-4 font-medium">Order Summary</h2>
 
 
               {products.map(product => {
                 return (
-                  <div className="border-2 border-gray-300 p-4 rounded-xl my-2 leading-6" key={product.id}>
+                  <div className="border-2 border-gray-300 p-4 rounded-xl my-2 leading-6 text-sm" key={product.id}>
                     <div className="flex items-center rounded-lg py-4 max-w-md" key={product.id}>
                       <img src={product.image} alt="Product Image" className="w-16 h-16 rounded-lg object-cover" />
 

@@ -11,9 +11,14 @@ use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
 Route::get('/payment/finish', function (Request $request) {
-    return $request->all();
+    $order_id = explode('-', $request->order_id);
+    $order_id = $order_id[1];
 
-    return redirect('/my-orders');
+    $order = Order::with('bookings.product')->where('id', $order_id)->first();
+
+    return Inertia::render('PaymentFinish', [
+        'order' => $order
+    ]);
 });
 
 Route::get('/', function () {
@@ -53,7 +58,7 @@ Route::middleware('auth')->group(function () {
         $order->kelurahan = $order_detail['kelurahan'];
         $order->postal_code = $order_detail['postal_code'];
         $order->address_detail = $order_detail['address_detail'];
-        $order->status = 'belum_dibayar';
+        $order->status = 'pending';
         $order->grand_total = 0;
         $order->user_id = $request->user()->id;
         $order->save();
@@ -94,8 +99,8 @@ Route::middleware('auth')->group(function () {
                 'gross_amount' => $grand_total,
             ],
             'customer_details' => [
-                'first_name' => 'haikal',
-                'email' => 'haikalg2003@gmail.com',
+                'first_name' => $order->customer_name,
+                'whatsapp_number' => $order->whatsapp_number
             ],
         ];
 
@@ -114,12 +119,16 @@ Route::middleware('auth')->group(function () {
     });
 
     Route::get('my-orders', function (Request $request) {
+        $status = $request->query('status');
+        
         return Inertia::render('MyOrders', [
             'canLogin' => Route::has('login'),
             'canRegister' => Route::has('register'),
             'laravelVersion' => Application::VERSION,
             'phpVersion' => PHP_VERSION,
-            'orders' => Order::with(['bookings.product'])->where('user_id', $request->user()->id)->get()
+            'orders' => Order::with(['bookings.product'])->where('user_id', $request->user()->id)->when($status, function ($query, $status) {
+                return $query->where('status', $status);
+            })->get()
         ]);
     });
 

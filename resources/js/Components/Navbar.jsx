@@ -11,7 +11,6 @@ export default function Navbar({ auth }) {
       {auth.user ? (
         <div className="hidden md:flex gap-4">
           <Link href="/my-orders" className="px-4 py-2 bg-violet-600 text-white rounded-full flex items-center"><AiOutlineOrderedList size={18} /> <span className="ml-2">Order List</span></Link>
-          <a className="px-4 py-2 bg-violet-600 text-white rounded-full flex items-center"><AiOutlineUser size={18} /><span className="ml-2">Account</span></a>
         </div>
       ) : (
         <div className="hidden md:flex gap-4">

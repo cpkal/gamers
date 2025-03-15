@@ -120,9 +120,9 @@ export default function ProductCard({ product, productsSelected, handleSelect, h
           </button>
 
           <div className={show ? 'block' : 'hidden'}>
-            <div className="flex gap-2">
+            <div className="flex flex-col md:flex-row gap-2">
               <div>
-                <div className="p-1 border-2 rounded-full border-violet-600 flex gap-2 inline-block">
+                <div className="p-1 border-2 rounded-full border-violet-600 flex gap-2 inline-block w-min-auto">
                   <p className="text-sm">{dateRangeString ?? '-'}</p>
                 </div>
               </div>
