@@ -48,13 +48,29 @@ export default function ProductCard({ product, productsSelected, handleSelect, h
 
   const handleSetPickTime = (e) => {
     const pickTime = e.target.value;
+
+    if (pickTime < "08:00" || pickTime > "17:00") {
+      setPickTime("08:00");
+      return;
+    }
+
     setPickTime(pickTime)
     const parsed = JSON.parse(localStorage.getItem(product.id));
     localStorage.setItem(product.id, JSON.stringify({ ...parsed, pickTime }));
   }
 
   const handleSetQty = (e) => {
-    const q = e.target.value
+    const q = Number(e.target.value);
+    if (q < 1) {
+      setQty(1);
+      return;
+    }
+
+    if(q == 0 || q == '') {
+      setQty(1);
+      return;
+    }
+
     setQty(q);
     const parsed = JSON.parse(localStorage.getItem(product.id)) || {};
     localStorage.setItem(product.id, JSON.stringify({ ...parsed, qty: q }));
@@ -73,13 +89,14 @@ export default function ProductCard({ product, productsSelected, handleSelect, h
         handleSetQty={handleSetQty}
         handleSetDateRange={handleSetDateRange}
       />
-      <div className="max-w-sm rounded-2xl overflow-hidden border-2 border-gray-400">
+      <div className="max-w-sm rounded-2xl overflow-hidden border-2 ">
         <img className="w-full h-64 object-cover"
           src={product.image}
           alt="Product Image" />
         <div className="p-4">
           <h2 className="text-xl font-semibold text-gray-800">{product.name}</h2>
           <p className="text-lg py-2">{formatRupiahWithSesi(product.price)}</p>
+
           <button className={`mt-4 w-full bg-violet-600 text-white py-2 px-4 rounded-lg hover:bg-violet-700 ${show ? 'hidden' : 'block'}`} onClick={() => handleSelect(product)}>
             Booking Sekarang
           </button>

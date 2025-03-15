@@ -1,4 +1,3 @@
-import { useState } from "react";
 import { DateRange } from "react-date-range";
 import "react-date-range/dist/styles.css";
 import "react-date-range/dist/theme/default.css";
@@ -24,10 +23,25 @@ export default function BookingDialog({ product, show, handleClose, handleSetPic
 
           <div className="w-full p-4">
             <label className="block text-gray-700">Pilih Jam Pengambilan:</label>
-            <input onChange={(e) => handleSetPickTime(e)} type="time" value={pickTime ?? "08:00"} min="08:00" max="17:00" className="w-full p-2 border rounded-lg mb-3" />
+            <input
+              onChange={(e) => handleSetPickTime(e)}
+              required
+              type="time"
+              value={pickTime ?? "08:00"}
+              list="available-times"
+              className="w-full p-2 border rounded-lg mb-3"
+            />
+
+            <datalist id="available-times">
+              {Array.from({ length: 10 }, (_, i) => {
+                const hour = (8 + i).toString().padStart(2, "0");
+                return <option key={hour} value={`${hour}:00`} />;
+              })}
+            </datalist>
 
             <label className="block text-gray-700">Total Pesanan:</label>
             <input onChange={(e) => handleSetQty(e)} type="number" min="1"
+              required
               className="w-full p-2 border rounded-lg mb-4" value={qty ?? "1"} />
           </div>
         </div>
