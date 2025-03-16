@@ -115,8 +115,13 @@ export default function Checkout() {
                 </div>
                 <div className="flex flex-col">
                   <label htmlFor="" className="mb-2">Kode Pos</label>
-                  <input className="border-1 border-gray-500 p-2 rounded-lg" placeholder="Kode Pos" {...register('postal_code', { required: true })} />
-                  {errors.postal_code && <span className="text-red-500">Harus di Isi</span>}
+                  <input className="border-1 border-gray-500 p-2 rounded-lg" placeholder="Kode Pos" {...register('postal_code', {
+                    required: "Harus di Isi", pattern: {
+                      value: /^[0-9]{5}$/,
+                      message: "Kode Pos tidak valid"
+                    }
+                  })} />
+                  {errors.postal_code && <span className="text-red-500">{errors.postal_code.message}</span>}
                 </div>
               </div>
               <div className="flex flex-col mt-4">
